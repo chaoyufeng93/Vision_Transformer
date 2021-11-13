@@ -21,7 +21,7 @@ class Patch(torch.nn.Module):
     
     
 class Positional_Emb(torch.nn.Module):
-  def __init__(self, img_size, patch_num, emb_dim, dropout):
+  def __init__(self, img_size, patch_num, emb_dim, dropout = 0):
     super(Positional_Emb, self).__init__()
     self.pos_emb = torch.nn.Parameter(torch.randn(1 + img_size*img_size//((img_size//patch_num)*(img_size//patch_num)), emb_dim))
     self.dropout = torch.nn.Dropout(p = dropout)
