@@ -99,7 +99,7 @@ class Feed_Forward(torch.nn.Module):
     res = x
     x = self.LN(x)
     out = self.gelu(self.w1(x))
-    out = self.gelu(self.w2(out))
+    out = self.w2(out)
     out = self.dropout(out)
     out = out + res
     return out
