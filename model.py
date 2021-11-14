@@ -23,6 +23,7 @@ class Patch(torch.nn.Module):
 class Positional_Emb(torch.nn.Module):
   def __init__(self, img_size, patch_num, emb_dim, dropout = 0):
     super(Positional_Emb, self).__init__()
+    self.class_token = torch.nn.Parameter(torch.randn(1, emb_dim))
     self.pos_emb = torch.nn.Parameter(torch.randn(1 + img_size*img_size//((img_size//patch_num)*(img_size//patch_num)), emb_dim))
     self.dropout = torch.nn.Dropout(p = dropout)
     self.reset_weigths()
@@ -33,8 +34,9 @@ class Positional_Emb(torch.nn.Module):
       torch.nn.init.xavier_normal_(weight)
 
   def forward(self, x):
-    out = self.pos_emb.repeat(x.shape[0],1,1)
-    out[:,1:,:] += x
+    out = torch.cat([self.class_token.repeat(x.shape[0],1,1), x], dim = 1)
+    pos_emb = self.pos_emb.repeat(x.shape[0],1,1)
+    out += pos_emb
     out = self.dropout(out)
     return out
     
