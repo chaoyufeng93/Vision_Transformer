@@ -58,7 +58,7 @@ class Attention(torch.nn.Module):
     
     
 class Multi_Head_ATT(torch.nn.Module):
-    def __init__(self, emb_dim, multi_head = 1, mask = False, post_LN = True, dropout = 0):
+    def __init__(self, emb_dim, multi_head = 1, dropout = 0):
       super(Multi_Head_ATT,self).__init__()
       self.head = multi_head
       self.emb_dim = emb_dim
@@ -90,7 +90,7 @@ class Multi_Head_ATT(torch.nn.Module):
       
  
 class Feed_Forward(torch.nn.Module): 
-  def __init__(self, emb_dim, dim_expan = 4, post_LN = True, dropout = 0):
+  def __init__(self, emb_dim, dim_expan = 4, dropout = 0):
     super(Feed_Forward,self).__init__()
     self.w1 = torch.nn.Linear(emb_dim, dim_expan*emb_dim)
     self.w2 = torch.nn.Linear(dim_expan*emb_dim, emb_dim)
@@ -100,7 +100,7 @@ class Feed_Forward(torch.nn.Module):
   def forward(self,x):
     res = x
     x = self.LN(x)
-    out = self.gelu(self.w1(x))
+    out = self.dropout(self.gelu(self.w1(x)))
     out = self.w2(out)
     out = self.dropout(out)
     out = out + res
