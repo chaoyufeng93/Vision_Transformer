@@ -83,7 +83,7 @@ class Multi_Head_ATT(torch.nn.Module):
         k = self.k_att(k).view(-1,seq_len,self.head,self.emb_dim//self.head).permute(0,2,1,3).permute(0,1,3,2)
         v = self.v_att(v).view(-1,seq_len,self.head,self.emb_dim//self.head).permute(0,2,1,3)
         out = self.attention(q, k, v).permute(0,2,1,3).contiguous().view(-1,seq_len,self.emb_dim)
-        out = self.WO(out)   
+      out = self.WO(out)   
       out = self.dropout(out)
       out = out + res
       return out
